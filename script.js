@@ -1,4 +1,4 @@
-// Minimalist Developer Portfolio Script - Shoheb Amin
+﻿// Minimalist Developer Portfolio Script - Shoheb Amin
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
@@ -105,23 +105,37 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `Sending Message...`;
+            submitBtn.innerHTML = 'Sending Message...';
 
-            // Simulate slight server latency
-            setTimeout(() => {
-                submitBtn.innerHTML = `✓ Message Sent!`;
-                submitBtn.style.backgroundColor = '#10b981'; // solid clean green
-                
-                showToast("Thank you! Shoheb will get back to you shortly.");
+            // Prepare and send data to Web3Forms API
+            const formData = new FormData(contactForm);
 
-                // Reset form after display delay
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(async (response) => {
+                if (response.status === 200) {
+                    submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Message Sent!';
+                    submitBtn.style.backgroundColor = '#10b981'; // solid clean green
+                    showToast('Thank you! Shoheb will get back to you shortly.');
+                } else {
+                    submitBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error';
+                    showToast('Oops! Something went wrong. Please try again.');
+                }
+            })
+            .catch(error => {
+                submitBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error';
+                showToast('Network error. Please check your connection.');
+            })
+            .finally(() => {
                 setTimeout(() => {
                     contactForm.reset();
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
                     submitBtn.style.backgroundColor = '';
                 }, 3500);
-            }, 1000);
+            });
         });
     }
 
@@ -134,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.className = 'toast-notification';
         toast.innerHTML = `
             <div class="toast-content">
-                <span class="toast-icon">✓</span>
+                <span class="toast-icon">âœ“</span>
                 <span class="toast-message">${message}</span>
             </div>
         `;
