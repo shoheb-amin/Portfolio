@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prepare and send data to Web3Forms API
             const formData = new FormData(contactForm);
 
-            fetch('https://api.web3forms.com/submit', {
+            fetch('https://formsubmit.co/ajax/shohebamin7@gmail.com', {
                 method: 'POST',
                 body: formData
             })
