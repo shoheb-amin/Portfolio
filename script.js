@@ -107,12 +107,20 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Sending Message...';
 
-            // Prepare and send data to Web3Forms API
+            // Prepare and send JSON data to FormSubmit API
             const formData = new FormData(contactForm);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
 
             fetch('https://formsubmit.co/ajax/shohebamin7@gmail.com', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
             })
             .then(async (response) => {
                 if (response.status === 200) {
